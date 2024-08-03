@@ -67,6 +67,10 @@ const SignUpForm = ({ setFormState }) => {
     //   password: data.password
     // })
 
+    //--------------------------------------------------------------------------
+
+    // api 모듈화 :
+
     const response = await AuthApi.signUp({
       email: data.email,
       password: data.password
