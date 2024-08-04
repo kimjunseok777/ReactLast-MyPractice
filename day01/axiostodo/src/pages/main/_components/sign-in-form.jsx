@@ -3,10 +3,11 @@ import FormInput from "../../../components/FormInput";
 import TDButton from "../../../components/Button";
 import { Form } from "./style";
 import { useNavigate } from "react-router-dom";
-
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import AuthApi from "apis/auth.api";
+import axios from "axios"
 
 const singInFormSchema = yup.object().shape({
   email: yup.string().email("이메일 양식이 일치하지 않습니다").required(" "),
@@ -28,25 +29,41 @@ const SignInForm = () => {
     resolver: yupResolver(singInFormSchema),
   });
 
+  //----------------------------------------------------------------------------
+  // 로그인 기능 :
+
   const handlePressSignIn = async (data) => {
     try {
-      const response = await fetch("/api/user/login", {
-        method: "post",
-        body: JSON.stringify({
-          email: data.email,
-          password: data.password,
-        }),
+      const response = await AuthApi.signIn({
+        email: data.email,
+        password: data.password
       });
-      const response_data = await response.json();
+      if (response.data.ok) { //-->  이렇게 로그인 성공, 실패에 관해서 ok 에 true, false 를 할 수도 있고, 에러처리로 할 수도 있다
 
-      if (response_data.status === 200) {
-        navigate("/todo/3");
+        //--------------------------------------------------------------
+        // localStorage 저장 :
+        
+        // console.log(response.data.token)  //-->  토큰값 확인할 수 있다
+
+        // localStorage.getItem("access_token", response.data.token) //-->  토큰 뿐만 아니라, 유저에 관한 데이터 여러개 localStorage 로 넣을 것이다
+        localStorage.getItem("user", {
+          data: response.data.token,
+          info: response.data.info
+        })
+
+        // return navigate("/todo");
       }
+      // alert(response.data.message);
+      alert("아이디와 비밀번호를 확인해주세요");
+      //--------------------------------------------------------------
+
     } catch (err) {
       console.log(err);
-      alert("아이디와 비밀번호를 확인해주세요");
+      alert("네트워크 연결이 불안정합니다");
     }
   };
+
+  //----------------------------------------------------------------------------
 
   return (
     <S.Form onSubmit={handleSubmit(handlePressSignIn)}>

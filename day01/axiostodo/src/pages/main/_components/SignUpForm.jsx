@@ -77,9 +77,11 @@ const SignUpForm = ({ setFormState }) => {
     })
 
     console.log(response)
-
-    // alert(`${data.email}님 환영합니다`);
-    // setFormState("SIGN-IN");
+    if(response.data.ok) { //-->  ok 가 true 이면 회원가입 성공 액션들이 일어나는 것이다
+        alert(response.data.message); //-->  백엔드에서 보내준 데이터로 알림창을 띄우는 것이다
+        //-->  응답 데이터인 response 의 date 에는 ok, message, info, token ... 등의 데이터들이 담겨 온다
+        setFormState("SIGN-IN");
+    }
   };
 
   //----------------------------------------------------------------------------

@@ -39,7 +39,7 @@ router.post("/sign-up", async (req, res) => {
 //-----------------------------------------------------------------------------------------------------------------------
 // 로그인 :
 
-router.post("/sign-in", JwtAuth, async(req, res) => {
+router.post("/sign-in", async(req, res) => {
     // 미들웨어 JwtAuth 사이에 끼워주었다  -->  jwt 를 디코드하고, req.user 에 id 값을 넣어서 전달해준다 (req 데이터를 중간에서 가공해준 것이다)
     
     const {email, password} = req.body
@@ -69,7 +69,7 @@ router.post("/sign-in", JwtAuth, async(req, res) => {
     if(!isMatchPassword) {
         return res.json({
             ok: false,
-            message: "비밀번호를 다시 확인해주세요"
+            message: "아이디와 비밀번호를 다시 확인해주세요"
         })
     } //-->  이렇게 유저가 존재하지 않거나, 비밀번호가 일치하지 않을 때 예외처리를 해주면 된다  -->  여기에 예외처리 되지 않으면 성공적으로 로그인 되는 것이다
 
