@@ -1,5 +1,6 @@
 
 
+
 앞에서 AuthApi 사용해서 회원가입 로직 만드는 것까지 진행했었다
 
 이제 로그인 만들고, 투두 만들고, React Query 로 넘어갈 것이다
@@ -11,10 +12,12 @@
 ** 경로 이동 : sign-in-form.jsx
 
         -->  apis 에서 auth.api.js 에서 만들어준 로그인 요청 기능 그대로 import 받아서 사용하면 된다
+                ex) AuthApi.signIn({ email , password ... })
 
         -->  handlePressSignIn 함수에 fetch 로 msw 에 데이터 요청했던 것 다 지워주고, axios 로 만들어준 모듈화 기능들 사용해주자
 
-        -->  로그인 기능이나 회원가입 기능은 JwtAuth 미들웨어가 적용되면 안된다  -->  토큰이 발급되기 전인데, 토큰이 있어야된다는 오류가 뜨게 된다
+        -->  로그인 기능이나 회원가입 기능은 JwtAuth 미들웨어가 적용되면 안된다
+                토큰이 발급되기 전에 있을 기능들 (로그인, 회원가입) 인데, 토큰이 있어야된다는 오류가 뜨게 된다
 
 
 ===================================================================================================
@@ -24,41 +27,53 @@
 
         -->  이제 토큰을 관리해볼 것이다  -->  관리하는 방법 : cookie , local storage
 
-        ) local storage : 웹 브라우저 내에 있는 저장소  -->  개발자 모드에서 Application 에 local storage 에서 확인이 가능하다
-                                    (이 공간에 key 와 value 값이 저장이 되고, 마음대로 가져다 쓸 수 있다)
-                                    -->  local storage 는 웹 브라우저가 꺼져도 계속 유지가 된다  -->  ex) 웹 브라우저가 꺼져도 로그인이 계속 유지되는 경우
+        ) local storage : 웹 브라우저 내부에 있는 저장소  -->  개발자 모드에서 Application 에 local storage 에서 확인이 가능하다
+                                    (이 공간에 key 와 value 값이 저장이 되고, 마음대로 가져다 쓸 수 있다)  -->  localStorage 에서 getItem, setItem ... 등의 옵션들로 관리할 수 있다
+                                    -->  local storage 는 웹 브라우저가 꺼져도 계속 유지가 된다  -->  ex) 웹 브라우저가 꺼져도 로그인이 계속 유지되게 만들 수 있다
 
-        ) cookie : 마찬가지로 개발자모드의 Application 의 Cookies 에서 확인이 가능하다  -->  name 과 value 로 저장한다
+        ) cookie : 마찬가지로 개발자모드 Application 의 Cookies 에서 확인이 가능하다  -->  name 과 value 로 저장한다
                          react-cookie 라는 라이브러리를 설치해야한다
                          -->  쿠키로 입력을 하게 되면 굳이 헤더에 토큰을 담지 않아도, 데이터가 알아서 전송이 된다 (쿠키가 알아서 간다)
-                         -->  이 옵션이 withCredentials: true 이다 (자동으로 데이터가 전송된다  -->  token)
+                         -->  이 옵션이 withCredentials: true 이다 (자동으로 데이터가 전송된다  -->  token)  -->  axios.create() 이 부분에서 옵션 넣어줬다
 
 
 ** 경로 이동 : base.js
 
         -->  withCredentials 옵션 넣어주자
 
-        -->  토큰 저장하는 방법 익혀보자
+        -->  토큰 저장하는 방법 익혀보자 (cookie 말고 localStorage 사용할 것이다)
 
 
 ** 경로 이동 : sign-in-form.jsx
 
+        토큰에 데이터 넣는 방법 ex)
+                localStorage.setItem( "key 값" , JSON.stringify({
+                        token: ~,
+                        info: ~,
+                        ... 저장소에 넣어줄 값들 작성하면 된다
+                }))
+
         -->  토큰을 저장하는 요직을 만들어보자
 
-        -->  localStorage.getItem() 입력해주자  -->  localStorage 에 저장하는 것이다 (key 와 value 가 입력이되면, 자동으로 set 이 되는 것이다)
+        -->  localStorage.setItem() 입력해주자  -->  localStorage 에 저장하는 것이다 (key 와 value 가 입력이되면, 자동으로 set 이 되는 것이다)
 
         -->  로그인을 누르는 순간, 상단에 "000 님 반갑습니다" 라고 화면이 바껴야한다면 어떻게 해야할까?  -->  전역상태로 만들어서 관리해야한다
                 하지만 상태의 치명적 단점이 있다  -->  새로고침하면 다 초기화된다  -->  토큰뿐만 아니라, 유저에 관한 정보들 모두 localStorage 에 저장해줄 것이다
-                (info 정보도 함께 localStorage 에 넣어주자)
+                (token 뿐만 아니라 info 정보도 함께 localStorage 에 넣어주자)
 
         -->  localStorage 로 유저 정보 (token, info) 를 set 했다  -->  이제 이걸 전역상태관리 해야한다  -->  contextAPI 를 사용할 것이다
 
 
 ** 경로 이동 : providers  -->  auth-provider.js
 
+        -->  localStorage.getItem()  -->  로컬스토리지에 있는 데이터 가져오기 위해 "getItem" 사용해줬다
+
         -->  user 상태 만들어서 provider 만들고 전역상태 관리 만들어주자
 
         -->  App.js 로 가서 사용할 스코프 Provider 로 감싸주자
+
+        -->  info 데이터가 화면에 나오게 하고, 새로고침 해도 UI 가 유지되게 만들어줄 것이다
+                (useEffect 를 사용했기에, 이제 localStorage 에 user 가 있으면 데이터가 새로고침해도 유지된다)
 
 
 ** 경로 이동 : sign-in-form.jsx

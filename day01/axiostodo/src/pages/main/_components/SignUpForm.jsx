@@ -76,11 +76,14 @@ const SignUpForm = ({ setFormState }) => {
       password: data.password
     })
 
-    console.log(response)
+    console.log(response)  //-->  다시 json 으로 바꿔줄 필요 없이 바로 응답데이터를 사용할 수 있다 (axios 를 사용했기에 가능하다)
+
     if(response.data.ok) { //-->  ok 가 true 이면 회원가입 성공 액션들이 일어나는 것이다
         alert(response.data.message); //-->  백엔드에서 보내준 데이터로 알림창을 띄우는 것이다
         //-->  응답 데이터인 response 의 date 에는 ok, message, info, token ... 등의 데이터들이 담겨 온다
         setFormState("SIGN-IN");
+
+        //--> 이거 할 때 토큰 (JWT) 관련해서 오류가 떴었다  -->  프론트 부분과 백엔드 부분 잘 공부해보자
     }
   };
 

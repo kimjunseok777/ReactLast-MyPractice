@@ -6,6 +6,8 @@ const AuthApi = {
 
     signIn({email, password}) {
         return baseHttp.post("/user/sign-in", {email, password})
+        //--> 여기서 baseHttp 는 axios 를 커스텀해준 것이다 (기본 url 이 있고, 모든 쿠키를 허용하게 만들어준 axios 이다)  -->  사용할 때 await 붙여주면 된다
+        //--> email, password 를 이 signIn 함수의 매개변수로 받아서 바디데이터로 전송하는 것이다
     },
 
     signUp({email, password}) {
