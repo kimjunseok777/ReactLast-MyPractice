@@ -58,10 +58,10 @@ const SignUpForm = ({ setFormState }) => {
 
   //----------------------------------------------------------------------------
   // axios :
+  // axios 사용  -->  AuthApi 사용해주기 위해 주석처리해줬다
 
   const onSubmitSignUp = async(data) => {
 
-    // axios 사용  -->  AuthApi 사용해주기 위해 주석해줬다
     // const response = await axios.post("http://localhost:3040/user/sign-up", {
     //   email: data.email,
     //   password: data.password
