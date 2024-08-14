@@ -58,6 +58,8 @@ const SignInForm = () => {
         // console.log(response.data.token)  //-->  토큰값 확인할 수 있다 (jwt 를 통해 암호화된 값이 온다)  -->  위에 구조분해할당 한 걸로 적어줘도 된다
 
         // localStorage.setItem("access_token", response.data.token) //-->  토큰 뿐만 아니라, 유저에 관한 데이터 여러개 localStorage 로 넣어줄 것이다
+        //-->  이렇게 키 (access_token) 와 벨류 (response.data.token) 가 입력이 되면 자동으로 set이 된다
+
         localStorage.setItem("user", JSON.stringify({ //--> 이렇게 "setItem" 으로 localStorage 에 값을 넣을 수 있다
           //-->  스트링 밖에 안들어가기 때문에 JSON.stringify 으로 바꿔줘야한다
           token,
