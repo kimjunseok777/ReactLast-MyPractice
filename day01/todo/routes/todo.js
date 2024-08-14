@@ -19,14 +19,9 @@ router.get("/", async (req, res) => {
     const pageOffset = (page ?? 1) - 1
 
     const todos = await Todo.findAll({ //-->  이러면 모든 투두를 전부 다 가져온다
-
-        // limit: 10, //-->  10개만 가져오겠다는 것이다
         limit: perPage,
-
-        // offset: (page - 1) * 10, //-->  offset 은 건너뛰겠다는 의미이다
-        // 페이지 1을 주면 0 개부터 (처음부터) 시작하고, 페이지 2를 주면 10 개를 건너뛰는 것이다  -->  이런식으로 페이지네이션이 이뤄지는 것이다
-        //-->  이렇기에 프론트가 백엔드에게 페이지값을 전달해줘야 하는 것이다
         offset: pageOffset * perPage,
+        order: [['createdAt', 'desc']] // 생성일자 기준으로 내림차순
     })
 
     res.json(todos)

@@ -37,13 +37,17 @@ export const baseHttp = axios.create({
 //-->  사용자가 백엔드에게 보내는 request 를 가로채는 것이다
 baseHttp.interceptors.request.use((config) => {
     // request 어떻게 보낼 것인지 정의
-    const token = JSON.parse(localStorage.getItem("user")).token
+
+    // const token = JSON.parse(localStorage.getItem("user")).token
+    const token = JSON.parse(localStorage.getItem("user"))?.token  //-->  로그인 전이니 토큰이 있다면으로 바꿔줘야한다
+
     config.headers.Authorization = `Bearer ${token}`
     return config
 }, (err) => {
     // err 발생했을 때 어떻게 할 것인지 정의
     return Promise.reject(err)
 })
+
 
 //--------------------------------------------------------------------
 // 리프레쉬 토큰 참고 :
@@ -68,7 +72,7 @@ baseHttp.interceptors.response.use((response) => {
             ==>  사용자가 응답을 받기 전에 다시 보내는 것이다
             ==>  즉, 사용자는 리프레쉬토큰을 다시 발급받는 것도 모르게 할 수 있는 것이다
 
-            
+
         ) refresh 가 없는 상황 :
 
             * 만약 사용자에게 알려주고 싶으면 이렇게 하면 된다

@@ -51,7 +51,7 @@ const SignInForm = () => {
       //--------------------------------------------------------------
       // localStorage 저장 :
 
-      if (response.data.ok) { //-->  이렇게 로그인 성공, 실패에 관해서 ok 에 true, false 를 할 수도 있고, 에러처리로 할 수도 있다
+      if(response.data.ok) { //-->  이렇게 로그인 성공, 실패에 관해서 ok 에 true, false 를 할 수도 있고, 에러처리로 할 수도 있다
         //-->  여기서는 로그인이 성공했을 때, ok 의 값으로 true 가 들어가게 만들어줬다
         //-->  로그인이 성공했다면, localStorage 에 key , value 를 추가해주자 (user 라는 이름으로 토큰값을 넣어줄 것이다)
 
@@ -69,14 +69,14 @@ const SignInForm = () => {
         setUser(info) //-->  로그인 성공하면 유저 정보가 전역상태에 담기는 것이다 (info 값을 전역상태로 넣어줬다  -->  이걸 화면의 header 에 보이게 해줬다)
         //-->  새로고침해도 auth-provider.js 에 useEffect 만들어줬기에 user 전역상태의 info 값은 유지된다
 
-        // return navigate("/todo");
+        return navigate("/todo");
       }
       alert(response.data.message);
       // alert("아이디와 비밀번호를 확인해주세요");
       //--------------------------------------------------------------
 
     } catch (err) {
-      console.log(err);
+      // console.log(err);
       alert("네트워크 연결이 불안정합니다");
     }
   };

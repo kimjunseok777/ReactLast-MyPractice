@@ -1,8 +1,11 @@
 import styled from "styled-components";
 import { flexAlignCenter, flexCenter } from "../../../libs/styles/common";
 import TDButton from "../../../components/Button";
+import { useTodo } from "providers/todo-provider";
 
 const AddTodoModal = ({ setIsOpenAddTodoModal }) => {
+
+  const {addTodo, getTodo} = useTodo()
 
   /**
    * @description
@@ -10,6 +13,19 @@ const AddTodoModal = ({ setIsOpenAddTodoModal }) => {
    */
   const onPressAddTodo = async (event) => {
     event.preventDefault();
+
+    //-------------------------------------------------------------------------
+    // axios2 수업 :
+
+    const {title, content} = event.target
+    await addTodo({
+      title: title.value,
+      content: content.value
+    }) //--> 성공하지 않으면 에러가 발생하니까 밑의 코드가 작동을 하지 않는다
+    setIsOpenAddTodoModal(false)
+    await getTodo() //-->  추가되고 조회를 다시 하는 것이다
+
+    //-------------------------------------------------------------------------
   };
 
   return (

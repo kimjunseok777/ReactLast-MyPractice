@@ -1,19 +1,28 @@
 import styled from "styled-components";
 import { flexAlignCenter } from "../../../libs/styles/common";
 import { useRef, useState } from "react";
+import { useTodo } from "providers/todo-provider";
 
 const OneTodo = ({ todo }) => {
   const [isEditMode, setIsEditMode] = useState(false);
   const contentRef = useRef();
+  const {deleteTodo, getTodo} = useTodo()
 
+  //-------------------------------------------------------------------------
+  // axios2 수업 :
   const onPressDeleteTodo = async() => {
-    const todoId = todo.id;
-    const response = await fetch(`/api/todo/${todoId}`, {
-      method: 'delete'
+    // const todoId = todo.id;
+    // const response = await fetch(`/api/todo/${todoId}`, {
+    //   method: 'delete'
+    // })
+    // const data = await response.json()
+    // console.log(data)
+    await deleteTodo({
+      todoId: todo.id
     })
-    const data = await response.json()
-    console.log(data)
+    await getTodo() //-->  마지막 코드라 await 걸어도 되고 안 걸어도 된다
   };
+  //-------------------------------------------------------------------------
 
   const onPressChangeEditMode = () => {
     setIsEditMode(true);
